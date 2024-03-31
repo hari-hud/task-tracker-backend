@@ -15,14 +15,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Task'
+              $ref: '#/components/schemas/CreateOrUpdateTask'
       responses:
         '201':
           description: Task created successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Task'
+                $ref: '#/components/schemas/RetrieveTask'
     get:
       summary: Retrieve all tasks
       tags:
@@ -35,7 +35,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Task'
+                  $ref: '#/components/schemas/RetrieveTask'
 
   /tasks/{task_id}:
     put:
@@ -54,14 +54,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Task'
+              $ref: '#/components/schemas/CreateOrUpdateTask'
       responses:
         '200':
           description: Task updated successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Task'
+                $ref: '#/components/schemas/RetrieveTask'
     delete:
       summary: Delete a task
       tags:
@@ -87,14 +87,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Category'
+              $ref: '#/components/schemas/CreateOrUpdateCategory'
       responses:
         '201':
           description: Category created successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Category'
+                $ref: '#/components/schemas/RetrieveCategory'
     get:
       summary: Retrieve all categories
       tags:
@@ -107,7 +107,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Category'
+                  $ref: '#/components/schemas/RetrieveCategory'
 
   /categories/{category_id}:
     put:
@@ -126,14 +126,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Category'
+              $ref: '#/components/schemas/CreateOrUpdateCategory'
       responses:
         '200':
           description: Category updated successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Category'
+                $ref: '#/components/schemas/RetrieveCategory'
     delete:
       summary: Delete a category
       tags:
@@ -159,14 +159,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Sprint'
+              $ref: '#/components/schemas/CreateOrUpdateSprint'
       responses:
         '201':
           description: Sprint created successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Sprint'
+                $ref: '#/components/schemas/RetrieveSprint'
     get:
       summary: Retrieve all sprints
       tags:
@@ -179,7 +179,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Sprint'
+                  $ref: '#/components/schemas/RetrieveSprint'
 
   /sprints/{sprint_id}:
     put:
@@ -198,14 +198,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Sprint'
+              $ref: '#/components/schemas/CreateOrUpdateSprint'
       responses:
         '200':
           description: Sprint updated successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Sprint'
+                $ref: '#/components/schemas/RetrieveSprint'
     delete:
       summary: Delete a sprint
       tags:
@@ -251,7 +251,41 @@ components:
         L: Large size - (Takes week to complete)
         XL: Extra large size (Takes more than weeks)
 
-    Task:
+    CreateOrUpdateTask:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        priority:
+          $ref: '#/components/schemas/TaskPriority'
+        status:
+          $ref: '#/components/schemas/TaskStatus'
+        size:
+          $ref: '#/components/schemas/TaskSize'
+        category:
+          type: string
+          description: Office, Household, Learning
+        sprint:
+          type: string
+        goal:
+          type: string
+        estimate:
+          type: string
+        start_date:
+          type: string
+          format: date
+        end_date:
+          type: string
+          format: date
+        due_date:
+          type: string
+          format: date
+      required:
+        - title
+
+    RetrieveTask:
       type: object
       properties:
         id:
@@ -284,10 +318,26 @@ components:
         due_date:
           type: string
           format: date
+        created_at:
+          type: string
+          format: date
+        updated_at:
+          type: string
+          format: date
       required:
         - title
 
-    Category:
+    CreateOrUpdateCategory:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+      required:
+        - name
+
+    RetrieveCategory:
       type: object
       properties:
         id:
@@ -307,7 +357,25 @@ components:
         In Progress: Task is being worked on,
         Complete: Task is completed
 
-    Sprint:
+    CreateOrUpdateSprint:
+      type: object
+      properties:
+        name:
+          type: string
+        status:
+          $ref: '#/components/schemas/SprintStatus'
+        start_date:
+          type: string
+          format: date
+        end_date:
+          type: string
+          format: date
+      required:
+        - name
+        - start_date
+        - end_date
+
+    RetrieveSprint:
       type: object
       properties:
         id:
@@ -326,7 +394,6 @@ components:
         - name
         - start_date
         - end_date
-
 tags:
   - name: Task
     description: Operations related to tasks
