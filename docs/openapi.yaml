@@ -1,0 +1,336 @@
+openapi: 3.0.0
+info:
+  title: Task Tracker API
+  description: API for managing tasks, categories, and sprints in a task tracking system
+  version: 1.0.0
+
+paths:
+  /tasks:
+    post:
+      summary: Create a new task
+      tags:
+        - Task
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Task'
+      responses:
+        '201':
+          description: Task created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+    get:
+      summary: Retrieve all tasks
+      tags:
+        - Task
+      responses:
+        '200':
+          description: List of tasks
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Task'
+
+  /tasks/{task_id}:
+    put:
+      summary: Update an existing task
+      tags:
+        - Task
+      parameters:
+        - in: path
+          name: task_id
+          required: true
+          schema:
+            type: integer
+          description: ID of the task to update
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Task'
+      responses:
+        '200':
+          description: Task updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+    delete:
+      summary: Delete a task
+      tags:
+        - Task
+      parameters:
+        - in: path
+          name: task_id
+          required: true
+          schema:
+            type: integer
+          description: ID of the task to delete
+      responses:
+        '204':
+          description: Task deleted successfully
+
+  /categories:
+    post:
+      summary: Create a new category
+      tags:
+        - Category
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Category'
+      responses:
+        '201':
+          description: Category created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+    get:
+      summary: Retrieve all categories
+      tags:
+        - Category
+      responses:
+        '200':
+          description: List of categories
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Category'
+
+  /categories/{category_id}:
+    put:
+      summary: Update an existing category
+      tags:
+        - Category
+      parameters:
+        - in: path
+          name: category_id
+          required: true
+          schema:
+            type: integer
+          description: ID of the category to update
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Category'
+      responses:
+        '200':
+          description: Category updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+    delete:
+      summary: Delete a category
+      tags:
+        - Category
+      parameters:
+        - in: path
+          name: category_id
+          required: true
+          schema:
+            type: integer
+          description: ID of the category to delete
+      responses:
+        '204':
+          description: Category deleted successfully
+
+  /sprints:
+    post:
+      summary: Create a new sprint
+      tags:
+        - Sprint
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Sprint'
+      responses:
+        '201':
+          description: Sprint created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sprint'
+    get:
+      summary: Retrieve all sprints
+      tags:
+        - Sprint
+      responses:
+        '200':
+          description: List of sprints
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Sprint'
+
+  /sprints/{sprint_id}:
+    put:
+      summary: Update an existing sprint
+      tags:
+        - Sprint
+      parameters:
+        - in: path
+          name: sprint_id
+          required: true
+          schema:
+            type: integer
+          description: ID of the sprint to update
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Sprint'
+      responses:
+        '200':
+          description: Sprint updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sprint'
+    delete:
+      summary: Delete a sprint
+      tags:
+        - Sprint
+      parameters:
+        - in: path
+          name: sprint_id
+          required: true
+          schema:
+            type: integer
+          description: ID of the sprint to delete
+      responses:
+        '204':
+          description: Sprint deleted successfully
+
+components:
+  schemas:
+    TaskPriority:
+      type: string
+      enum: [P0, P1, P2]
+      description: >
+        P0: Must have,
+        P1: Should have,
+        P2: Good to have
+
+    TaskStatus:
+      type: string
+      enum: [Backlog, Committed, In Progress, Blocked, Complete]
+      description: >
+        Backlog: Task yet to be started,
+        Committed: Task assigned and committed,
+        In Progress: Task is being worked on,
+        Blocked: Task is blocked,
+        Complete: Task is completed
+
+    TaskSize:
+      type: string
+      enum: [T, S, M, L, XL]
+      description: >
+        T: Tiny - Minutes (Takes few minutes to complete)
+        S: Small size  - (Takes few hours to complete)
+        M: Medium size - (Takes few days to complete)
+        L: Large size - (Takes week to complete)
+        XL: Extra large size (Takes more than weeks)
+
+    Task:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+        priority:
+          $ref: '#/components/schemas/TaskPriority'
+        status:
+          $ref: '#/components/schemas/TaskStatus'
+        size:
+          $ref: '#/components/schemas/TaskSize'
+        category:
+          type: string
+          description: Office, Household, Learning
+        sprint:
+          type: string
+        goal:
+          type: string
+        estimate:
+          type: string
+        start_date:
+          type: string
+          format: date
+        end_date:
+          type: string
+          format: date
+        due_date:
+          type: string
+          format: date
+      required:
+        - title
+
+    Category:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+      required:
+        - name
+
+    SprintStatus:
+      type: string
+      enum: [ Backlog, In Progress, Complete ]
+      description: >
+        Backlog: Task yet to be started,
+        In Progress: Task is being worked on,
+        Complete: Task is completed
+
+    Sprint:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        status:
+          $ref: '#/components/schemas/SprintStatus'
+        start_date:
+          type: string
+          format: date
+        end_date:
+          type: string
+          format: date
+      required:
+        - name
+        - start_date
+        - end_date
+
+tags:
+  - name: Task
+    description: Operations related to tasks
+  - name: Category
+    description: Operations related to task categories
+  - name: Sprint
+    description: Operations related to sprints
